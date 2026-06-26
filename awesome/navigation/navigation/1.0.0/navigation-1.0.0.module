@@ -53,11 +53,11 @@
         {
           "name": "navigation-1.0.0.aar",
           "url": "navigation-1.0.0.aar",
-          "size": 38162,
-          "sha512": "826970ddc4ad0e5dbcd88bcf91b365cbde3110c8ecaf2ee528cf71596915683bca5b8bf4d1f1637003a25446825395097f9fb7c3dceb67d61d174c3900b19d22",
-          "sha256": "788789aa9a0b07849081c3f3e581e5faf1d2cb6df6f6c585471dc7d472b03db0",
-          "sha1": "73991a7781b596ca67fda8dc50ecaf5b858c2aa0",
-          "md5": "c0994cf20e91e5e93b66a9cc7d396a19"
+          "size": 73371,
+          "sha512": "8a6509d334908b6547a10a67e30ac62bc452fd2c3db79f1ffd4781e534a08095a6961c69e2abca10d9e22e0b6c82c7a7e09766b57f15513742fb70ccc3f6c379",
+          "sha256": "b00c8eb9612601a72dec80b4a8cfbb6536db43b39d15ce43029675caeb100176",
+          "sha1": "84e9be581ac0f41745c0c3460a5993e30961ae9a",
+          "md5": "117d0206b2e9bdac6f065447dd3b47d8"
         }
       ]
     },
@@ -125,31 +125,11 @@
         {
           "name": "navigation-1.0.0.aar",
           "url": "navigation-1.0.0.aar",
-          "size": 38162,
-          "sha512": "826970ddc4ad0e5dbcd88bcf91b365cbde3110c8ecaf2ee528cf71596915683bca5b8bf4d1f1637003a25446825395097f9fb7c3dceb67d61d174c3900b19d22",
-          "sha256": "788789aa9a0b07849081c3f3e581e5faf1d2cb6df6f6c585471dc7d472b03db0",
-          "sha1": "73991a7781b596ca67fda8dc50ecaf5b858c2aa0",
-          "md5": "c0994cf20e91e5e93b66a9cc7d396a19"
-        }
-      ]
-    },
-    {
-      "name": "releaseVariantReleaseSourcePublication",
-      "attributes": {
-        "org.gradle.category": "documentation",
-        "org.gradle.dependency.bundling": "external",
-        "org.gradle.docstype": "sources",
-        "org.gradle.usage": "java-runtime"
-      },
-      "files": [
-        {
-          "name": "navigation-1.0.0-sources.jar",
-          "url": "navigation-1.0.0-sources.jar",
-          "size": 5991,
-          "sha512": "8023657d6c010e354e265492befb1ef8ba54675a852799de82638cf12ab28fb16c037dd168bed18727afb3c7ecfa0de14101880ea1af6266276905a1310e0c05",
-          "sha256": "b3f9ff0ebeb2e0f0d4109360a43975ce1b87c28c09f414be439588f874ff06b7",
-          "sha1": "280def0558a2aeba0508377e846185ff711b79f5",
-          "md5": "cf0b1de2474a8fa4b038f14b7cc39d1f"
+          "size": 73371,
+          "sha512": "8a6509d334908b6547a10a67e30ac62bc452fd2c3db79f1ffd4781e534a08095a6961c69e2abca10d9e22e0b6c82c7a7e09766b57f15513742fb70ccc3f6c379",
+          "sha256": "b00c8eb9612601a72dec80b4a8cfbb6536db43b39d15ce43029675caeb100176",
+          "sha1": "84e9be581ac0f41745c0c3460a5993e30961ae9a",
+          "md5": "117d0206b2e9bdac6f065447dd3b47d8"
         }
       ]
     },
@@ -165,11 +145,11 @@
         {
           "name": "navigation-1.0.0-javadoc.jar",
           "url": "navigation-1.0.0-javadoc.jar",
-          "size": 300512,
-          "sha512": "55297ffcc07be9793d701fd42ec5e82de40317e43d6b4ea5ab56480287c63315f518b17fd734f13fbabc1badfe74ba658a10fdcd6afaf51dc4e2c34f7c21c3e1",
-          "sha256": "438f146dacd12f07d510359b8703e805ec346b6513c681185297b99def3b3ac3",
-          "sha1": "e76e0871b074f214577962cb082ad902873e9ec0",
-          "md5": "4dd87297cbe51dca21a777b1bdda7a51"
+          "size": 330772,
+          "sha512": "bcad372562f67672836fa5a5e997b6320f0b266f87463c3f328b0f00e3138900382bb7c1e0867458288973c0210186ecdf58c78606d8b5b62801aa02c21d96f8",
+          "sha256": "ec30432b3dde9cd26ce71c0353a8c29ac3cf6060dac8e026db60ae276e608f20",
+          "sha1": "ba7ec9bc55e08ac5ea444c059e0886e9e72f81a1",
+          "md5": "ef843bb4b7eaf01e5b24e43bc9d967f7"
         }
       ]
     }
