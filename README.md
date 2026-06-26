@@ -38,7 +38,7 @@ Add the Maven URL to your `settings.gradle.kts`:
 ```kotlin
 dependencyResolutionManagement {
     repositories {
-        maven { url = uri("https://YOUR_GITHUB_PAGES_URL") }
+        maven { url = uri("https://code-blooded2.github.io/AwesomeNavigation/awesome") }
     }
 }
 ```
@@ -46,7 +46,7 @@ dependencyResolutionManagement {
 Add the dependency:
 
 ```kotlin
-implementation("awesome.navigation:awesome-nav:1.0.0")
+implementation("awesome.navigation:navigation:1.0.0")
 ```
 
 ---
@@ -302,7 +302,7 @@ sealed class AppRoute : NavRoute {
 ## License
 
 ```
-Copyright 2025 ByTech Solutions
+Copyright 2026 By CodeBlooded (Faheem)
 
 Licensed under the Apache License, Version 2.0
 ```
