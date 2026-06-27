@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Awesome Nav — Jetpack Compose Navigation</title>
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@4.10.1/dist/full.min.css" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg:       #0D0D0F;
+      --surface:  #14141A;
+      --surface2: #1C1C26;
+      --border:   #2A2A38;
+      --violet:   #7C3AED;
+      --violet-l: #A78BFA;
+      --violet-d: #4C1D95;
+      --text:     #F0EEFF;
+      --muted:    #8B8BA0;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+    }
+
+    .mono { font-family: 'JetBrains Mono', monospace; }
+
+    /* ── Nav ── */
+    .top-nav {
+      position: sticky; top: 0; z-index: 50;
+      background: rgba(13,13,15,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 2rem; height: 56px;
+    }
+    .nav-logo { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 1rem; color: var(--text); }
+    .nav-logo span { color: var(--violet-l); }
+    .nav-badge { font-size: 0.65rem; background: var(--violet-d); color: var(--violet-l); padding: 2px 8px; border-radius: 999px; margin-left: 8px; font-family: 'JetBrains Mono', monospace; }
+
+    /* ── Tabs ── */
+    .tab-bar {
+      display: flex; gap: 0;
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
+      background: var(--bg);
+    }
+    .tab-btn {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem; font-weight: 600;
+      letter-spacing: 0.05em;
+      padding: 0.85rem 1.4rem;
+      border: none; background: none;
+      color: var(--muted); cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: color 0.2s, border-color 0.2s;
+      text-transform: uppercase;
+    }
+    .tab-btn:hover { color: var(--text); }
+    .tab-btn.active { color: var(--violet-l); border-bottom-color: var(--violet); }
+
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* ── Hero ── */
+    .hero-section {
+      padding: 5rem 2rem 3rem;
+      max-width: 860px; margin: 0 auto;
+      text-align: center;
+    }
+    .hero-eyebrow {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem; letter-spacing: 0.18em;
+      color: var(--violet-l); text-transform: uppercase;
+      margin-bottom: 1.5rem;
+    }
+    .hero-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 700; line-height: 1.15;
+      margin-bottom: 1.25rem;
+    }
+    .hero-title .accent { color: var(--violet-l); }
+    .hero-sub {
+      font-size: 1.05rem; color: var(--muted);
+      line-height: 1.7; max-width: 560px; margin: 0 auto 2.5rem;
+    }
+
+    /* ── Animation Demo ── */
+    .demo-wrap {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 1rem; max-width: 680px; margin: 3rem auto;
+    }
+    .demo-phone {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px; overflow: hidden;
+      padding: 1rem;
+    }
+    .demo-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem; letter-spacing: 0.12em;
+      text-transform: uppercase; margin-bottom: 0.75rem;
+    }
+    .demo-label.bad  { color: #F87171; }
+    .demo-label.good { color: #86EFAC; }
+    .demo-screens {
+      position: relative; height: 80px;
+      border-radius: 8px; overflow: hidden;
+    }
+    .demo-screen {
+      position: absolute; inset: 0;
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem; font-weight: 600;
+    }
+    .screen-a { background: var(--violet-d); color: var(--violet-l); z-index: 1; }
+    .screen-b { background: var(--surface2); color: var(--muted); border: 1px solid var(--border); z-index: 2; }
+
+    /* Bad: sequential */
+    .bad-demo .screen-b {
+      animation: seq-enter 1.2s ease-in-out infinite;
+      animation-delay: 1s;
+    }
+    .bad-demo .screen-a {
+      animation: seq-exit 1.2s ease-in-out infinite;
+      animation-delay: 1s;
+    }
+    @keyframes seq-enter {
+      0%,40%  { transform: translateX(100%); opacity: 0; }
+      60%,90% { transform: translateX(0);    opacity: 1; }
+      100%    { transform: translateX(0);    opacity: 1; }
+    }
+    @keyframes seq-exit {
+      0%,40%  { opacity: 1; }
+      60%,90% { opacity: 0; }
+      100%    { opacity: 0; }
+    }
+
+    /* Good: parallel */
+    .good-demo .screen-b {
+      animation: par-enter 1.2s ease-in-out infinite;
+      animation-delay: 1s;
+    }
+    .good-demo .screen-a {
+      animation: par-exit-slide 1.2s ease-in-out infinite;
+      animation-delay: 1s;
+    }
+    @keyframes par-enter {
+      0%,30%  { transform: translateX(100%); }
+      65%,90% { transform: translateX(0); }
+      100%    { transform: translateX(0); }
+    }
+    @keyframes par-exit-slide {
+      0%,30%  { transform: translateX(0); }
+      65%,90% { transform: translateX(-30%); }
+      100%    { transform: translateX(-30%); }
+    }
+
+    /* ── Cards ── */
+    .card-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem; max-width: 860px; margin: 2rem auto 0;
+    }
+    .feat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px; padding: 1.25rem;
+      transition: border-color 0.2s;
+    }
+    .feat-card:hover { border-color: var(--violet); }
+    .feat-icon { font-size: 1.4rem; margin-bottom: 0.6rem; }
+    .feat-title { font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; font-weight: 600; margin-bottom: 0.35rem; color: var(--text); }
+    .feat-desc  { font-size: 0.78rem; color: var(--muted); line-height: 1.6; }
+
+    /* ── Compare Table ── */
+    .compare-wrap { max-width: 860px; margin: 0 auto; overflow-x: auto; }
+    .compare-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+    .compare-table th {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 0.75rem 1rem; text-align: left;
+      border-bottom: 1px solid var(--border); color: var(--muted);
+    }
+    .compare-table th:last-child { color: var(--violet-l); }
+    .compare-table td { padding: 0.7rem 1rem; border-bottom: 1px solid var(--border); color: var(--muted); vertical-align: top; }
+    .compare-table td:first-child { color: var(--text); font-weight: 500; }
+    .compare-table td:last-child  { color: var(--text); }
+    .compare-table tr:hover td    { background: var(--surface); }
+    .tag-good { display: inline-block; background: rgba(134,239,172,0.1); color: #86EFAC; font-size: 0.65rem; font-family: 'JetBrains Mono', monospace; padding: 1px 7px; border-radius: 999px; margin-left: 6px; }
+
+    /* ── Guide / Install ── */
+    .content-wrap { max-width: 720px; margin: 0 auto; padding: 3rem 2rem; }
+    .section-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.1rem; font-weight: 700;
+      color: var(--text); margin: 2.5rem 0 0.5rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .section-title:first-child { margin-top: 0; }
+    .prose { font-size: 0.88rem; color: var(--muted); line-height: 1.8; margin: 0.5rem 0 1rem; }
+
+    /* ── Code blocks ── */
+    .code-block {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px; overflow: hidden;
+      margin: 0.75rem 0 1.5rem;
+    }
+    .code-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.5rem 1rem;
+      background: var(--surface2);
+      border-bottom: 1px solid var(--border);
+    }
+    .code-lang { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; }
+    .copy-btn {
+      font-family: 'JetBrains Mono', monospace; font-size: 0.65rem;
+      color: var(--muted); background: none; border: 1px solid var(--border);
+      border-radius: 4px; padding: 2px 10px; cursor: pointer; transition: color 0.2s, border-color 0.2s;
+    }
+    .copy-btn:hover { color: var(--violet-l); border-color: var(--violet); }
+    pre {
+      margin: 0; padding: 1.1rem 1.25rem;
+      overflow-x: auto; font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem; line-height: 1.7;
+    }
+    .kw  { color: #C084FC; }
+    .fn  { color: #93C5FD; }
+    .str { color: #86EFAC; }
+    .cm  { color: #4B5563; }
+    .ty  { color: #FCD34D; }
+    .hl  { color: var(--violet-l); }
+
+    /* ── Step list ── */
+    .step-list { list-style: none; padding: 0; margin: 0; counter-reset: steps; }
+    .step-list li {
+      counter-increment: steps;
+      display: flex; gap: 1rem; align-items: flex-start;
+      margin-bottom: 2rem;
+    }
+    .step-num {
+      flex-shrink: 0;
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      background: var(--violet-d); border: 1px solid var(--violet);
+      color: var(--violet-l);
+      font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .step-body { flex: 1; }
+    .step-title { font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; font-weight: 600; color: var(--text); margin-bottom: 0.3rem; }
+
+    /* ── Footer ── */
+    .footer {
+      text-align: center; padding: 3rem 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.75rem; color: var(--muted);
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .footer a { color: var(--violet-l); text-decoration: none; }
+    .footer a:hover { text-decoration: underline; }
+
+    @media (max-width: 600px) {
+      .demo-wrap { grid-template-columns: 1fr; }
+      .top-nav { padding: 0 1rem; }
+      .tab-bar { padding: 0 0.5rem; overflow-x: auto; }
+      .tab-btn { padding: 0.85rem 0.9rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Top Nav ── -->
+<nav class="top-nav">
+  <div style="display:flex;align-items:center">
+    <span class="nav-logo">⚡ <span>awesome</span>-nav</span>
+    <span class="nav-badge">v1.0.0</span>
+  </div>
+  <a href="https://github.com/Code-Blooded2/AwesomeNavigation" target="_blank"
+     style="font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:var(--muted);text-decoration:none;display:flex;align-items:center;gap:6px">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+    GitHub
+  </a>
+</nav>
+
+<!-- ── Tab Bar ── -->
+<div class="tab-bar">
+  <button class="tab-btn active" onclick="showTab('about')">About</button>
+  <button class="tab-btn" onclick="showTab('guide')">Guide</button>
+  <button class="tab-btn" onclick="showTab('install')">Installation</button>
+</div>
+
+<!-- ══════════════════════════════════════════════════
+     ABOUT TAB
+═══════════════════════════════════════════════════ -->
+<div id="tab-about" class="tab-panel active">
+
+  <div class="hero-section">
+    <p class="hero-eyebrow">Jetpack Compose · Navigation Library</p>
+    <h1 class="hero-title">
+      Compose Navigation<br>destroys your screen<br>
+      <span class="accent">before the next one appears.</span>
+    </h1>
+    <p class="hero-sub">
+      Awesome Nav keeps both screens alive during transitions —
+      enabling parallel animations, predictive back gestures, and
+      per-screen lifecycle that actually works.
+    </p>
+    <div style="display:flex;gap:0.75rem;justify-content:center;flex-wrap:wrap">
+      <button onclick="showTab('install')" style="background:var(--violet);color:#fff;border:none;border-radius:8px;padding:0.65rem 1.5rem;font-family:'JetBrains Mono',monospace;font-size:0.8rem;font-weight:600;cursor:pointer;transition:opacity 0.2s" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">Get Started →</button>
+      <button onclick="showTab('guide')" style="background:transparent;color:var(--violet-l);border:1px solid var(--violet);border-radius:8px;padding:0.65rem 1.5rem;font-family:'JetBrains Mono',monospace;font-size:0.8rem;font-weight:600;cursor:pointer;transition:opacity 0.2s" onmouseover="this.style.opacity='.75'" onmouseout="this.style.opacity='1'">Read Docs</button>
+    </div>
+  </div>
+
+  <!-- Animation comparison -->
+  <div class="demo-wrap" style="padding:0 1rem">
+    <div class="demo-phone">
+      <div class="demo-label bad">✗ Compose Navigation</div>
+      <div class="demo-screens bad-demo">
+        <div class="demo-screen screen-a">Screen A</div>
+        <div class="demo-screen screen-b">Screen B</div>
+      </div>
+      <p style="font-size:0.68rem;color:var(--muted);margin:0.6rem 0 0;font-family:'JetBrains Mono',monospace">Sequential · one screen at a time</p>
+    </div>
+    <div class="demo-phone" style="border-color:var(--violet)">
+      <div class="demo-label good">✓ Awesome Nav</div>
+      <div class="demo-screens good-demo">
+        <div class="demo-screen screen-a">Screen A</div>
+        <div class="demo-screen screen-b">Screen B</div>
+      </div>
+      <p style="font-size:0.68rem;color:#86EFAC;margin:0.6rem 0 0;font-family:'JetBrains Mono',monospace">Parallel · both screens alive</p>
+    </div>
+  </div>
+
+  <!-- Features -->
+  <div style="padding:0 2rem 1rem">
+    <div class="card-grid">
+      <div class="feat-card">
+        <div class="feat-icon">⚡</div>
+        <div class="feat-title">Z-Stack Rendering</div>
+        <div class="feat-desc">Every entry renders simultaneously. No AnimatedContent overhead. Both screens alive during transition.</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">🧠</div>
+        <div class="feat-title">Scoped ViewModels</div>
+        <div class="feat-desc">Each NavEntry owns its ViewModelStore. VMs are cleared only after the exit animation completes — never before.</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">🔄</div>
+        <div class="feat-title">Per-Entry Lifecycle</div>
+        <div class="feat-desc">ON_RESUME and ON_PAUSE fire correctly per screen. Background screens don't keep collecting flows.</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">🔒</div>
+        <div class="feat-title">Type-Safe Routes</div>
+        <div class="feat-desc">Pure Kotlin sealed classes. No NavType registration, no string IDs, no URI conversion at runtime.</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">🌐</div>
+        <div class="feat-title">Deep Links</div>
+        <div class="feat-desc">Single addDeepLink() pattern registration. Pending queue for cold-start links. No NavDeepLink per destination.</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">📡</div>
+        <div class="feat-title">NavRegistry</div>
+        <div class="feat-desc">Access the navigator from anywhere — ViewModels, Services, BroadcastReceivers — without passing it around.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Compare table -->
+  <div style="padding:2rem 2rem 4rem">
+    <p style="font-family:'JetBrains Mono',monospace;font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);margin-bottom:1rem;text-align:center">Technical Comparison</p>
+    <div class="compare-wrap">
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th></th>
+            <th>Compose Navigation</th>
+            <th>Awesome Nav</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Screens during transition</td><td>1 (sequential)</td><td>2 (parallel) <span class="tag-good">better</span></td></tr>
+          <tr><td>Shared element transitions</td><td>Limited, workaround needed</td><td>Native — both screens alive <span class="tag-good">better</span></td></tr>
+          <tr><td>Predictive back</td><td>Partial</td><td>Full gesture control <span class="tag-good">better</span></td></tr>
+          <tr><td>Stack data structure</td><td>ArrayDeque + NavGraph + IDs</td><td>List&lt;NavEntry&gt; plain Kotlin <span class="tag-good">simpler</span></td></tr>
+          <tr><td>ViewModel clear timing</td><td>On back stack pop</td><td>After exit animation <span class="tag-good">correct</span></td></tr>
+          <tr><td>Lifecycle per screen</td><td>Shared Activity lifecycle</td><td>Per-entry LifecycleOwner <span class="tag-good">better</span></td></tr>
+          <tr><td>Route definition</td><td>@Serializable + NavType + URI</td><td>Pure sealed classes <span class="tag-good">simpler</span></td></tr>
+          <tr><td>Navigator outside Compose</td><td>Not possible</td><td>NavRegistry.get() anywhere <span class="tag-good">better</span></td></tr>
+          <tr><td>Result passing</td><td>SavedStateHandle workaround</td><td>First-class StateFlow <span class="tag-good">better</span></td></tr>
+          <tr><td>Build time overhead</td><td>Annotation processing</td><td>Zero <span class="tag-good">faster</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════════════════
+     GUIDE TAB
+═══════════════════════════════════════════════════ -->
+<div id="tab-guide" class="tab-panel">
+  <div class="content-wrap">
+
+    <div class="section-title">Define Routes</div>
+    <p class="prose">All routes must be a <code style="color:var(--violet-l);background:var(--surface2);padding:1px 6px;border-radius:4px">@Serializable</code> sealed class implementing <code style="color:var(--violet-l);background:var(--surface2);padding:1px 6px;border-radius:4px">NavRoute</code>.</p>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">kotlin</span><button class="copy-btn" onclick="copyCode(this)">copy</button></div>
+      <pre><span class="hl">@Serializable</span>
+<span class="kw">sealed class</span> <span class="ty">AppRoute</span> : <span class="ty">NavRoute</span> {
+    <span class="hl">@Serializable</span> <span class="kw">data object</span> <span class="ty">Home</span>    : <span class="ty">AppRoute</span>()
+    <span class="hl">@Serializable</span> <span class="kw">data object</span> <span class="ty">Settings</span>: <span class="ty">AppRoute</span>()
+    <span class="hl">@Serializable</span> <span class="kw">data class</span>  <span class="ty">Detail</span>(<span class="kw">val</span> id: <span class="ty">Int</span>, <span class="kw">val</span> title: <span class="ty">String</span>) : <span class="ty">AppRoute</span>()
+}</pre>
+    </div>
+
+    <div class="section-title">Setup NavHost</div>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">kotlin</span><button class="copy-btn" onclick="copyCode(this)">copy</button></div>
+      <pre><span class="hl">@Composable</span>
+<span class="kw">fun</span> <span class="fn">App</span>() {
+    <span class="kw">val</span> navigator = <span class="fn">rememberNavigator</span>&lt;<span class="ty">AppRoute</span>&gt;(<span class="ty">AppRoute</span>.Home)
+
+    <span class="fn">NavHost</span>(
+        navigator       = navigator,
+        backgroundColor = <span class="ty">MaterialTheme</span>.colorScheme.background
+    ) { route -&gt;
+        <span class="kw">when</span> (route) {
+            <span class="kw">is</span> <span class="ty">AppRoute</span>.Home     -&gt; <span class="fn">HomeScreen</span>()
+            <span class="kw">is</span> <span class="ty">AppRoute</span>.Settings -&gt; <span class="fn">SettingsScreen</span>()
+            <span class="kw">is</span> <span class="ty">AppRoute</span>.Detail   -&gt; <span class="fn">DetailScreen</span>(route.id, route.title)
+        }
+    }
+}</pre>
+    </div>
+
+    <div class="section-title">Navigate</div>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">kotlin</span><button class="copy-btn" onclick="copyCode(this)">copy</button></div>
+      <pre><span class="cm">// Push</span>
+navigator.<span class="fn">push</span>(<span class="ty">AppRoute</span>.Detail(id = <span class="str">42</span>, title = <span class="str">"Item"</span>))
+
+<span class="cm">// Back</span>
+navigator.<span class="fn">back</span>()
+
+<span class="cm">// Replace current screen</span>
+navigator.<span class="fn">replace</span>(<span class="ty">AppRoute</span>.Settings)
+
+<span class="cm">// Clear stack and set new root</span>
+navigator.<span class="fn">clearAll</span>(<span class="ty">AppRoute</span>.Home)
+
+<span class="cm">// Pop up to a route</span>
+navigator.<span class="fn">popUpTo</span>(<span class="ty">AppRoute</span>.Home, inclusive = <span class="kw">false</span>)</pre>
+    </div>
+
+    <div class="section-title">Animation Styles</div>
+    <p class="prose">Configure once in <code style="color:var(--violet-l);background:var(--surface2);padding:1px 6px;border-radius:4px">Application.onCreate()</code>.</p>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">kotlin</span><button class="copy-btn" onclick="copyCode(this)">copy</button></div>
+      <pre><span class="ty">AwesomeNav</span>.<span class="fn">setup</span> {
+    enterDuration  = <span class="str">300</span>
+    exitDuration   = <span class="str">250</span>
+    animationStyle = <span class="ty">NavAnimationStyle</span>.SlideHorizontal <span class="cm">// default</span>
+    <span class="cm">// SlideHorizontal · SlideVertical · Fade · ScaleFade · None</span>
+}</pre>
+    </div>
+
+    <div class="section-title">Result Passing</div>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">kotlin</span><button class="copy-btn" onclick="copyCode(this)">copy</button></div>
+      <pre><span class="cm">// Screen B — set result before going back</span>
+navigator.<span class="fn">setResult</span>(<span class="str">"picked_item"</span>, selectedItem)
+navigator.<span class="fn">back</span>()
+
+<span class="cm">// Screen A — observe and consume</span>
+<span class="fn">LaunchedEffect</span>(<span class="ty">Unit</span>) {
+    navigator.results.<span class="fn">collect</span> {
+        <span class="kw">val</span> item = navigator.<span class="fn">consumeTypedResult</span>&lt;<span class="ty">Item</span>&gt;(<span class="str">"picked_item"</span>)
+                   ?: <span class="kw">return</span>@collect
+        <span class="cm">// handle result</span>
+    }
+}</pre>
+    </div>
+
+    <div class="section-title">NavRegistry — Access Anywhere</div>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">kotlin</span><button class="copy-btn" onclick="copyCode(this)">copy</button></div>
+      <pre><span class="cm">// From a ViewModel, Service, or BroadcastReceiver</span>
+<span class="kw">val</span> navigator = <span class="ty">NavRegistry</span>.<span class="fn">get</span>&lt;<span class="ty">AppRoute</span>&gt;()
+navigator?.<span class="fn">push</span>(<span class="ty">AppRoute</span>.Detail(id = <span class="str">1</span>, title = <span class="str">"From ViewModel"</span>))</pre>
+    </div>
+
+    <div class="section-title">Deep Links</div>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">kotlin</span><button class="copy-btn" onclick="copyCode(this)">copy</button></div>
+      <pre><span class="ty">AwesomeNav</span>.<span class="fn">setup</span> {
+    <span class="fn">addDeepLink</span>(<span class="str">"myapp://detail/{id}/{title}"</span>) { params -&gt;
+        <span class="ty">AppRoute</span>.Detail(
+            id    = params[<span class="str">"id"</span>]?.<span class="fn">toIntOrNull</span>() ?: <span class="kw">return</span>@addDeepLink <span class="kw">null</span>,
+            title = params[<span class="str">"title"</span>]        ?: <span class="kw">return</span>@addDeepLink <span class="kw">null</span>
+        )
+    }
+}
+
+<span class="cm">// In Activity</span>
+<span class="kw">override fun</span> <span class="fn">onCreate</span>(savedInstanceState: <span class="ty">Bundle</span>?) {
+    <span class="kw">super</span>.<span class="fn">onCreate</span>(savedInstanceState)
+    <span class="fn">setContent</span> { <span class="fn">App</span>() }
+    intent?.<span class="fn">let</span> { <span class="ty">AwesomeNav</span>.<span class="fn">handleDeepLink</span>(it) }
+}
+
+<span class="kw">override fun</span> <span class="fn">onNewIntent</span>(intent: <span class="ty">Intent</span>) {
+    <span class="kw">super</span>.<span class="fn">onNewIntent</span>(intent)
+    <span class="ty">AwesomeNav</span>.<span class="fn">handleDeepLink</span>(intent)
+}</pre>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════
+     INSTALL TAB
+═══════════════════════════════════════════════════ -->
+<div id="tab-install" class="tab-panel">
+  <div class="content-wrap">
+
+    <ul class="step-list">
+      <li>
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <div class="step-title">Add Maven repository</div>
+          <p class="prose">In your <code style="color:var(--violet-l);background:var(--surface2);padding:1px 6px;border-radius:4px">settings.gradle.kts</code>, add the repository URL.</p>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">kotlin</span><button class="copy-btn" onclick="copyCode(this)">copy</button></div>
+            <pre>dependencyResolutionManagement {
+    repositories {
+        <span class="fn">maven</span> { url = <span class="fn">uri</span>(<span class="str">"https://code-blooded2.github.io/AwesomeNavigation/"</span>) }
+    }
+}</pre>
+          </div>
+        </div>
+      </li>
+      <li>
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <div class="step-title">Add dependency</div>
+          <p class="prose">In your app's <code style="color:var(--violet-l);background:var(--surface2);padding:1px 6px;border-radius:4px">build.gradle.kts</code>.</p>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">kotlin</span><button class="copy-btn" onclick="copyCode(this)">copy</button></div>
+            <pre>implementation(<span class="str">"awesome.navigation:navigation:1.0.0"</span>)</pre>
+          </div>
+        </div>
+      </li>
+      <li>
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <div class="step-title">Add serialization plugin</div>
+          <p class="prose">Required for type-safe routes.</p>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">kotlin</span><button class="copy-btn" onclick="copyCode(this)">copy</button></div>
+            <pre><span class="cm">// build.gradle.kts (app)</span>
+plugins {
+    id(<span class="str">"org.jetbrains.kotlin.plugin.serialization"</span>)
+}</pre>
+          </div>
+        </div>
+      </li>
+      <li>
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <div class="step-title">Initialize in Application</div>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">kotlin</span><button class="copy-btn" onclick="copyCode(this)">copy</button></div>
+            <pre><span class="kw">class</span> <span class="ty">MyApp</span> : <span class="ty">Application</span>() {
+    <span class="kw">override fun</span> <span class="fn">onCreate</span>() {
+        <span class="kw">super</span>.<span class="fn">onCreate</span>()
+        <span class="ty">AwesomeNav</span>.<span class="fn">setup</span> {
+            animationStyle = <span class="ty">NavAnimationStyle</span>.SlideHorizontal
+            enterDuration  = <span class="str">300</span>
+            exitDuration   = <span class="str">250</span>
+        }
+    }
+}</pre>
+          </div>
+        </div>
+      </li>
+    </ul>
+
+    <div class="section-title">Requirements</div>
+    <div style="display:flex;flex-direction:column;gap:0.5rem;margin-top:0.75rem">
+      <div style="display:flex;justify-content:space-between;padding:0.6rem 0;border-bottom:1px solid var(--border);font-size:0.82rem">
+        <span style="color:var(--muted);font-family:'JetBrains Mono',monospace">Kotlin</span>
+        <span>2.0+</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;padding:0.6rem 0;border-bottom:1px solid var(--border);font-size:0.82rem">
+        <span style="color:var(--muted);font-family:'JetBrains Mono',monospace">Jetpack Compose</span>
+        <span>1.6+</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;padding:0.6rem 0;border-bottom:1px solid var(--border);font-size:0.82rem">
+        <span style="color:var(--muted);font-family:'JetBrains Mono',monospace">kotlinx-serialization</span>
+        <span>1.6+</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;padding:0.6rem 0;font-size:0.82rem">
+        <span style="color:var(--muted);font-family:'JetBrains Mono',monospace">minSdk</span>
+        <span>24+</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── Footer ── -->
+<footer class="footer">
+  <p>Built by <a href="https://github.com/Code-Blooded2/AwesomeNavigation">Faheem (thecoder)</a> · <a href="https://github.com/Code-Blooded2/AwesomeNavigation">GitHub</a> · Apache 2.0 License</p>
+  <p style="margin-top:0.4rem;color:#374151">awesome-nav v1.0.0</p>
+</footer>
+
+<script>
+  function showTab(name) {
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + name).classList.add('active');
+    event.target.classList.add('active');
+  }
+
+  function copyCode(btn) {
+    const pre = btn.closest('.code-block').querySelector('pre');
+    navigator.clipboard.writeText(pre.innerText).then(() => {
+      btn.textContent = 'copied!';
+      btn.style.color = '#86EFAC';
+      setTimeout(() => { btn.textContent = 'copy'; btn.style.color = ''; }, 1800);
+    });
+  }
+</script>
+</body>
+</html>
