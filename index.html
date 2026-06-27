@@ -500,6 +500,17 @@ navigator.<span class="fn">back</span>()
 <span class="kw">val</span> navigator = <span class="ty">NavRegistry</span>.<span class="fn">get</span>&lt;<span class="ty">AppRoute</span>&gt;()
 navigator?.<span class="fn">push</span>(<span class="ty">AppRoute</span>.Detail(id = <span class="str">1</span>, title = <span class="str">"From ViewModel"</span>))</pre>
     </div>
+	
+	
+	    <div class="section-title">Access Navigator Easily</div>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">kotlin</span><button class="copy-btn" onclick="copyCode(this)">copy</button></div>
+      <pre><span class="cm">// Anywhere in route</span>
+    <span class="kw">val</span> navigator = <span class="fn">currentNavigator</span>&lt;<span class="ty">AppRoute</span>&gt;()
+
+navigator?.<span class="fn">push</span>(<span class="ty">AppRoute</span>.Detail(id = <span class="str">1</span>, title = <span class="str">"From ViewModel"</span>))</pre>
+    </div>
+	
 
     <div class="section-title">Deep Links</div>
     <div class="code-block">
@@ -579,7 +590,7 @@ plugins {
       <li>
         <div class="step-num">4</div>
         <div class="step-body">
-          <div class="step-title">Initialize in Application</div>
+          <div class="step-title">Initialize in Application (optional)</div>
           <div class="code-block">
             <div class="code-header"><span class="code-lang">kotlin</span><button class="copy-btn" onclick="copyCode(this)">copy</button></div>
             <pre><span class="kw">class</span> <span class="ty">MyApp</span> : <span class="ty">Application</span>() {
