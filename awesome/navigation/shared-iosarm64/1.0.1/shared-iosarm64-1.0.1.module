@@ -100,11 +100,11 @@
         {
           "name": "shared-iosArm64Main.klib",
           "url": "shared-iosarm64-1.0.1.klib",
-          "size": 84411,
-          "sha512": "99ab2b0a7db14957b3a5f0ca5cf6e53d4fe6f0c9dccf4e958abb563bdecbd7e16f6880d539371fee9ac8aa70f76ffc3c2ce3325708f09f09da98ffb80e4acd74",
-          "sha256": "790bd220127139739e8c4a1b3d8fb6b22a59c2eda19710923b051ee4ccabeabb",
-          "sha1": "450c4056ce86dc523a9eb45597347a3b5c0ea33a",
-          "md5": "1cdb78cb20e88b05a9a6869cf000df70"
+          "size": 84283,
+          "sha512": "8c00221b604fccc477bb573ebbabde8d42ba08742b67d12825a3f5f1d80b05bce845bfc461b463e63981e18500d5949ec45670db0251c29506e7f5f189c95e46",
+          "sha256": "f5388ed86211c48ce69722b934a822a81e758fe652a4e1d130288541d66aab9b",
+          "sha1": "c496f24e8e5534a31e70b6b4ab4eee8faca45f3e",
+          "md5": "01c7cd258179c8b7f3e042d317775e0b"
         }
       ]
     },

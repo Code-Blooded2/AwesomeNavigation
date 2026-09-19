@@ -100,11 +100,11 @@
         {
           "name": "shared-iosSimulatorArm64Main.klib",
           "url": "shared-iossimulatorarm64-1.0.1.klib",
-          "size": 84479,
-          "sha512": "e36bbd49bc104c2315eed90a20bb8334559f52bf2267f1dd27b8d6fa153bbebd9f2fec00dacb6feaf112d00e32c064d1ae81ef6e8e090bd6eb78323b8d1b9b76",
-          "sha256": "981ab090172652affc2488f57cefa8dfa4880283b0dfa73d87da4e76d4b91b4f",
-          "sha1": "6377e717f02e13dd24133d2fbd6f68e79af68a65",
-          "md5": "555fe034041c9dd71ac2f313c7a7870c"
+          "size": 84354,
+          "sha512": "78459312bbc30fb3b886dbd1a511a39264196be6c5a638e34a7584cc2fe124cacf281601d738b192bec9955b644423aff1e1f787370a75b6cfef679f82dd8525",
+          "sha256": "1c1f012c373a66614d9d24271c1504e90b8563ba21bf1231f881327021e605a9",
+          "sha1": "8d291e46cb723f8c8e7813bb689bfd15447b9199",
+          "md5": "1ed706b9f4fdbd7313551118a5c96d4d"
         }
       ]
     },
